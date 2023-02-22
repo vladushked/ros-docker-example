@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+    ros1_talker:
+        image: osrf/ros:noetic-desktop-full
+        command: roslaunch roscpp_tutorials talker_listener.launch
+    ros2_listener:
+        image: osrf/ros:humble-desktop
+        command: ros2 run demo_nodes_cpp listener
+    bridge:
+        image: ghcr.io/contradict/ros-humble-ros1-bridge:main
+        environment:
+            - "ROS_HOSTNAME=bridge"
+            - "ROS_MASTER_URI=http://ros1_talker:11311"
+        command: ros2 run ros1_bridge dynamic_bridge
